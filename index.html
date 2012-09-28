@@ -159,6 +159,7 @@ function applyDataUrlToCanvas(dataUrl){
     if(dataUrl.match(/^data\:/)){
 	    base64 = dataUrl.replace(/^.*?,/, '');
 	    exif = EXIF.readFromBinaryFile(new BinaryFile(atob(base64)));
+	    orientation = exif.Orientation;
     }
 
 	// Insert the file
