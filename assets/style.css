@@ -1,0 +1,92 @@
+/* STYLE */
+
+	body{
+		position:absolute;
+		top:0;
+		bottom:0;
+		left:0;
+		right:0;
+		padding:0;
+		margin:0;
+		overflow: hidden;
+		font-family:"Trebuchet MS";
+	}
+	nav{
+		position:absolute;
+		left:0;
+		top:50px;
+		bottom:0;
+		vertical-align: middle;
+		text-align:center;
+	}
+		nav button{
+			display: block;
+			border:none;
+			border-radius:50px;
+			font-size:20px;
+			padding:10px;
+			background-color:rgba(0,0,0,0.5);
+			color:white;
+			margin:5px;
+			box-shadow:0 0 5px 5px rgba(0,0,0,0.5);
+			-webkit-transition:box-shadow 5s;
+		}
+		nav button.color{
+			font-size:0;
+			padding:20px;
+		}
+		nav button:active{
+			box-shadow:0 0 5px 5px rgba(255,255,255,0.5);
+			-webkit-transition:box-shadow 0s;
+		}
+
+
+/** when user performs an action */
+.loading{
+	position:absolute;
+	top:50px;
+	bottom:0;
+	left:0;
+	right:0;
+	text-align:center;
+}
+.loading p{
+	padding:20px;
+	background-color:rgba(0,0,0,0.4);
+	color:white;
+	margin:auto;
+	max-width:200px;
+}
+
+
+.ellipsis{
+	overflow:hidden;
+	display: inline-block;
+	font-size:inherit;
+	text-align:right;
+	width:inherit;
+	-webkit-animation:'bounce' 1s ease infinite alternate;
+	-moz-animation:'bounce' 1s ease infinite alternate;
+	-ms-animation:'bounce' 1s ease infinite alternate;
+	animation:'bounce' 1s ease infinite alternate;
+}
+.ellipsis:after{
+	content:'...';
+	overflow:hidden;
+}
+@-webkit-keyframes bounce{
+	from {width:0;}
+	to {width: 2.5em;}
+}
+@-moz-keyframes bounce{
+	from {width:0;}
+	to {width: 2.5em;}
+}
+@-ms-keyframes bounce{
+	from {width:0;}
+	to {width: 2.5em;}
+}
+@keyframes bounce{
+	from {width:0;}
+	to {width: 2.5em;}
+}

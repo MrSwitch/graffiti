@@ -1,0 +1,30 @@
+@font-face {
+	font-family: 'IcoMoon';
+	src: url('fonts/IcoMoon.eot');
+	src: url('fonts/IcoMoon.eot?#iefix') format('embedded-opentype'),
+		url('fonts/IcoMoon.svg#IcoMoon') format('svg'),
+		url('fonts/IcoMoon.woff') format('woff'),
+		url('fonts/IcoMoon.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'IcoMoon';
+	content: attr(data-icon);
+	speak: none;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	font-family: 'IcoMoon';
+	font-style: normal;
+	speak: none;
+}
+.icon-picture:before {
+	content: "\22";
+}
+.icon-arrow-down-alt1:before {
+	content: "\23";
+}
