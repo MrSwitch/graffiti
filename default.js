@@ -1,4 +1,3 @@
-
 function show(el){
 
 	if(typeof(el)==='string'){
