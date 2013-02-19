@@ -1,16 +1,44 @@
 /* STYLE */
 
-	body{
-		position:absolute;
-		top:0;
-		bottom:0;
-		left:0;
-		right:0;
-		padding:0;
-		margin:0;
-		overflow: hidden;
-		font-family:"Trebuchet MS";
+*{
+	box-sizing:border-box;
+}
+
+*[hidden]{
+	display: none;
+}
+
+body{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	padding:0;
+	margin:0;
+	overflow: hidden;
+	font-family:"Trebuchet MS";
+	color:white;
+	background: black;
+}
+
+	button{
+		display: inline-block;
+		border:none;
+		border-radius:50px;
+		font-size:20px;
+		padding:10px;
+		background-color:rgba(0,0,0,0.5);
+		color:white;
+		margin:5px;
+		box-shadow:0 0 5px 5px rgba(0,0,0,0.5);
+		-webkit-transition:box-shadow 5s;
 	}
+	button:active{
+		box-shadow:0 0 5px 5px rgba(255,255,255,0.5);
+		-webkit-transition:box-shadow 0s;
+	}
+
 	nav{
 		position:absolute;
 		left:0;
@@ -21,42 +49,59 @@
 	}
 		nav button{
 			display: block;
-			border:none;
-			border-radius:50px;
-			font-size:20px;
-			padding:10px;
-			background-color:rgba(0,0,0,0.5);
-			color:white;
-			margin:5px;
-			box-shadow:0 0 5px 5px rgba(0,0,0,0.5);
-			-webkit-transition:box-shadow 5s;
 		}
 		nav button.color{
 			font-size:0;
 			padding:20px;
 		}
-		nav button:active{
-			box-shadow:0 0 5px 5px rgba(255,255,255,0.5);
-			-webkit-transition:box-shadow 0s;
-		}
+
+canvas{
+	cursor: crosshair;
+}
 
 
 /** when user performs an action */
-.loading{
+aside{
 	position:absolute;
-	top:50px;
+	display: table;
+	text-align: center;
+	vertical-align: middle;
+	height:100%;
+	width:100%;
+	top:0;
 	bottom:0;
 	left:0;
 	right:0;
 	text-align:center;
+	padding:1em;
 }
-.loading p{
-	padding:20px;
-	background-color:rgba(0,0,0,0.4);
+
+
+aside > section{
+	background-color:rgba(0,0,0,0.5);
+	vertical-align: middle;
+	display: table-cell;
+	text-align: center;	
+	height:100%;
 	color:white;
 	margin:auto;
-	max-width:200px;
+	width:100%;
 }
+
+
+aside .close{
+	position: absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	display: block;
+	text-align: center;
+}
+aside .close span{
+	padding:5px;
+	background-color:black;
+}
+
 
 
 .ellipsis{
@@ -90,3 +135,71 @@
 	from {width:0;}
 	to {width: 2.5em;}
 }
+
+
+figure{
+	display:inline-block;
+	width:100px;
+	height:150px;
+	vertical-align: top;
+	background-color: rgba(0,0,0,0.5);
+}
+
+	figure img{
+		width:100%;
+	}
+
+figure.selected {
+	outline:3px solid lime;
+}
+figure .delete {
+	color:red;
+	display: none;
+	cursor:pointer;
+}
+figure:hover .delete {
+	display: block;
+}
+
+
+progress:not([value]){
+	display: none;
+}
+
+
+#share form{
+	max-width:600px;
+	margin: auto;
+}
+	form img{
+	 	width:100px;
+	 	float:left;
+	}
+	form hr{
+		clear:both;
+	}
+
+	#share form input,#share form textarea{
+		width:100%;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border: none;
+		border-radius: 5px;
+		padding: 8px;
+	}
+
+
+
+.table{
+	display: table;
+	width: 100%;
+}
+	.row {
+		display: table-row;
+	}
+		.cell {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+		}
+

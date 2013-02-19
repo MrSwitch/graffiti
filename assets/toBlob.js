@@ -69,8 +69,9 @@ if (Uint8Array) {
 	]);
 }
 if (HTMLCanvasElement && !HTMLCanvasElement.prototype.toBlob) {
+
 	var BlobBuilder = view.BlobBuilder || view.WebKitBlobBuilder || view.MozBlobBuilder || view.MSBlobBuilder;
-	if(!BlobBuilder){
+	if(!BlobBuilder && !view.Blob){
 		return;
 	}
 
@@ -87,10 +88,10 @@ if (HTMLCanvasElement && !HTMLCanvasElement.prototype.toBlob) {
 			, header_end = dataURI.indexOf(",")
 			, data = dataURI.substring(header_end + 1)
 			, is_base64 = is_base64_regex.test(dataURI.substring(0, header_end))
-			, bb = new BlobBuilder
+			, bb = (BlobBuilder?new BlobBuilder:null)
 			, blob
 		;
-		if (BlobBuilder.fake) {
+		if (BlobBuilder&&BlobBuilder.fake) {
 			// no reason to decode a data: URI that's just going to become a data URI again
 			blob = bb.getBlob(type);
 			if (is_base64) {
@@ -101,12 +102,16 @@ if (HTMLCanvasElement && !HTMLCanvasElement.prototype.toBlob) {
 			blob.data = data;
 			blob.size = data.length;
 		} else if (Uint8Array) {
-			if (is_base64) {
-				bb.append(decode_base64(data));
+
+			var binary = is_base64 ? decode_base64(data) : decodeURIComponent(data);
+
+			if (view.Blob) {
+				blob = new view.Blob([binary], {type:type});
 			} else {
-				bb.append(decodeURIComponent(data));
+				bb.append(binary);
+				blob = bb.getBlob(type);
 			}
-			blob = bb.getBlob(type);
+
 		}
 		callback(blob);
 	};

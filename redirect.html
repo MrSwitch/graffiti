@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<script>
+	var access_token = (window.location.hash||window.location.search).match(/access_token=([^&]+)/); 
+	var expires_in = (window.location.hash||window.location.search).match(/expires_in=([^&]+)/); 
+	var state = (window.location.hash||window.location.search).match(/state=([^&]+)/); 
+	if(access_token){ 
+		// Save the first match
+		access_token = decodeURIComponent(access_token[1]);
+		expires_in = parseInt(expires_in[1],10) + ((new Date()).getTime()/1000);
+		state = state ? state[1] : null;
+
+		window.opener.saveToken( access_token, expires_in, state );
+
+		window.close();
+	}
+</script>
