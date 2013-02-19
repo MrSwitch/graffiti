@@ -1,8 +1,7 @@
 /**
  * @author Andrew Dodson
- * @since Jan 2013
+ * @since Nov 2012
  */
-
 
 var canvas = document.getElementsByTagName('canvas')[0],
 	ctx = canvas.getContext("2d");
@@ -252,11 +251,23 @@ function readFile(file){
 	// This take a while so let the user know the cogs grinding
 	show('loading');
 
+	// Get ProgressEl
+	var progressEl = document.getElementById('loading').getElementsByTagName('progress')[0];
+
 	// Set an onload handler because we load files into it Asynchronously
 	reader.onload = function(e){
 
         // Print onto Canvas
 		applyDataUrlToCanvas( this.result );
+
+		progressEl.removeAttribute('max');
+		progressEl.removeAttribute('value');
+
+	};
+
+	reader.onprogress = function(e){
+		progressEl.max = e.total;
+		progressEl.value = e.loaded;
 	};
 
 	//

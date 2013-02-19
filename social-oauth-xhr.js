@@ -1,10 +1,20 @@
+
+/************************************
+ *
+ *
+ * CODE FOR PART 1
+ *
+ *
+ ***********************************/
+
+
 //
 // SkyDrive Appllication Key / Client ID.
-// Depending on where i'm running this code, dev/production i define the associative Windows Live Login credentials
+// Depending on the hostname e.g. localhost/production.com define the associative Windows Live Login credentials
 // Get yours for your hostname from https://manage.dev.live.com/
 var WINDOWS_CLIENT_ID = {
 	'adodson.com' : '00000000400D8578',
-	'local.knarly.com' : '000000004405FD31'
+	'local.knarly.com' : '000000004405FD31' // this is my localhost, windows forbids us from using "localhost"
 }[window.location.hostname];
 
 
@@ -13,7 +23,7 @@ var WINDOWS_CLIENT_ID = {
 // Callback function placeholder
 // This is defined when we add a callback operation to a login.
 // The functions token and saveToken below are used to set and execute this global function respectively.
-window.authCallback = function(){}
+window.authCallback = function(){};
 
 
 //
@@ -57,7 +67,7 @@ function getToken(scope, callback){
 		window.authCallback = callback;
 
 		// else open the signin window
-		var win = window.open( 'https://oauth.live.com/authorize'+ 
+		var win = window.open( 'https://oauth.live.com/authorize'+
 			'?client_id='+WINDOWS_CLIENT_ID+
 			'&scope='+scope+
 			'&state='+scope+
@@ -79,7 +89,7 @@ function navigateSkyDrive(){
 
 	// Get Search the user Albums on SkyDrive
 	createAlbumView("me/albums", "SkyDrive Albums");
-};
+}
 
 
 //
@@ -164,11 +174,11 @@ function label(item,container,token,click_callback){
 
 		fig.onclick = function(){
 			click_callback(item);
-		}
+		};
 
 		return fig;
 	})());
-}		
+}
 
 
 //
@@ -201,7 +211,7 @@ function httpRequest(url, callback){
 		r.onprogress = function(e){
 			progressEl.max = e.total;
 			progressEl.value = e.loaded;
-		}
+		};
 
 		r.open("GET", url);
 
@@ -217,7 +227,7 @@ function httpRequest(url, callback){
 
 //
 // JSONP
-// 
+//
 //
 var json_counter=0;
 function jsonp(path,callback){
@@ -258,7 +268,7 @@ function applyRemoteDataUrlToCanvas(url){
 		xhr.onprogress = function(e){
 			progressEl.max = e.total;
 			progressEl.value = e.loaded;
-		}
+		};
 		xhr.onload = function(r){
 
 			var type = xhr.getResponseHeader("content-type");
@@ -279,7 +289,7 @@ function applyRemoteDataUrlToCanvas(url){
 		xhr.send();
 	}
 	else{
-		// We are going to load it directly, 
+		// We are going to load it directly
 		// So we wont be able to use
 		applyDataUrlToCanvas( url );
 	}
@@ -297,12 +307,13 @@ function applyRemoteDataUrlToCanvas(url){
 
 
 // A global Variable with the selected album object
-var selectedAlbum = null; 
+var selectedAlbum = null;
 
 
+//
 // pickSkyDriveAlbumToSave
 // Creates a list of the users albums to save
-// 
+//
 function pickSkyDriveAlbumToSave(){
 
 	// Get the token
@@ -314,8 +325,8 @@ function pickSkyDriveAlbumToSave(){
 
 			var container = document.getElementById('figs');
 
-			// Populate it with 
-			// Build function
+			//
+			// Construct the figure build.
 			function figure(obj){
 
 				var id = obj.id.replace(/\W/,'');
@@ -331,7 +342,7 @@ function pickSkyDriveAlbumToSave(){
 					fig.id = id;
 					fig.onclick = function(){
 						var figs = container.getElementsByTagName('figure');
-						var bool = !(this.className === "selected");
+						var bool = (this.className !== "selected");
 						for(var i=0;i<figs.length;i++){
 							figs[i].className = '';
 						}
@@ -420,7 +431,6 @@ function createAlbum(callback){
 
 //
 // Save to SkyDrive
-// 
 //
 function saveToSkyDriveFolder(){
 
@@ -512,7 +522,7 @@ function share(e){
 			message : form.message.value,
 			link : window.location.href,
 			picture : form.picture.value
-		}
+		};
 
 		httpPost( 'https://apis.live.net/v5.0/me/share?access_token='+token, data, function(r){
 			console.log(data);
@@ -590,12 +600,12 @@ function httpUpload(url,formData,callback){
 		}catch(e){
 			callback({error:{message:"Server gave bad response"}});
 		}
-	}
+	};
 	xhr.upload.onprogress = function(e){
 		var prog = document.getElementById('saving').getElementsByTagName('progress')[0];
 		prog.max = e.total;
 		prog.value = e.loaded;
-	}
+	};
 
 	xhr.open("POST", url, true );
 	xhr.send(formData);
