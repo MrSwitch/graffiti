@@ -139,14 +139,22 @@ aside .close span{
 
 figure{
 	display:inline-block;
-	width:100px;
-	height:150px;
+	width:120px;
+	height:120px;
 	vertical-align: top;
 	background-color: rgba(0,0,0,0.5);
+	position: relative;
+	overflow: hidden;
+	margin:1em;
 }
 
 	figure img{
-		width:100%;
+		height:100%;
+	}
+	figure figcaption{
+		background-color: black;
+		position: absolute;
+		bottom: 0;
 	}
 
 figure.selected {
@@ -156,6 +164,13 @@ figure .delete {
 	color:red;
 	display: none;
 	cursor:pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: black;
+	width: 1.5em;
+	height: 1.5em;
+	border-bottom-left-radius: 50%;
 }
 figure:hover .delete {
 	display: block;
