@@ -123,28 +123,14 @@ function createAlbumView(path, name){
 			// remove previous
 			container.innerHTML = '<p>'+ ( path !== 'me/albums' ? "<a onclick='createAlbumView(\"me/albums\", \"SkyDrive Albums\");'>SkyDrive Albums</a> &gt; " : '') + name +"</p>";
 
-
-			function click_callback(obj){
-
-				if( obj.type === "photo" ){
-					applyRemoteDataUrlToCanvas( obj.source );
-				}
-				else if(obj.type === "album"){
-					createAlbumView(obj.id+'/files', obj.name);
-				}
-			}
-
-
 			// Loop through the results
 			for(var i=0;i<r.data.length;i++){
 
-				label( r.data[i], container, token, click_callback);
+				createThumbnail( r.data[i], container, thumbnail_click);
 
 			}
 
-
 			show(container);
-
 
 		}); // End of httpRequest()
 
@@ -152,30 +138,53 @@ function createAlbumView(path, name){
 }
 
 
-
-// Builds a label for an item
-function label(item,container,token,click_callback){
+//
+// Builds a thumbnail for an item
+// @param item Object containing a SkyDrive album or photo
+// @param container HTML element where the item should be appended
+// @param click_callback, what to do once the item has been clicked
+function createThumbnail(item,container,click_callback){
 
 	console.log(item);
 
-	container.appendChild((function(){
+	// Do not test scope, just get the token
+	getToken("",function(token){
 
-		var fig = document.createElement('figure');
-		var img = document.createElement('img');
-		img.src = ( item.picture || "https://apis.live.net/v5.0/" + item.id + "/picture" ) + "?access_token="+token;
-		fig.appendChild(img);
+		container.appendChild((function(){
 
-		var caption = document.createElement('figcaption');
-		caption.innerHTML = item.name;
-		fig.appendChild(caption);
+			var fig = document.createElement('figure');
+			var img = document.createElement('img');
+			img.src = ( item.picture || "https://apis.live.net/v5.0/" + item.id + "/picture" ) + "?access_token="+token;
+			fig.appendChild(img);
 
-		fig.onclick = function(){
-			click_callback(item);
-		};
+			var caption = document.createElement('figcaption');
+			caption.innerHTML = item.name;
+			fig.appendChild(caption);
 
-		return fig;
-	})());
+			fig.onclick = function(){
+				click_callback(item);
+			};
+
+			return fig;
+		})());
+	});
 }
+
+//
+// On thubnail click handler
+// If the item is a photo, load the image into canvas
+// Else create a new AlbumView
+//
+function thumbnail_click(obj){
+
+	if( obj.type === "photo" ){
+		applyRemoteDataUrlToCanvas( obj.source );
+	}
+	else if(obj.type === "album"){
+		createAlbumView(obj.id+'/files', obj.name);
+	}
+}
+
 
 
 //
@@ -269,8 +278,9 @@ function applyRemoteDataUrlToCanvas(url){
 		xhr.onload = function(r){
 
 			var type = xhr.getResponseHeader("content-type");
-			var URL = window.URL || window.webkitURL;
 			var blob = new Blob([xhr.response], {type: type});
+
+			var URL = window.URL || window.webkitURL;
 			var localurl = URL.createObjectURL(blob);
 
 			applyDataUrlToCanvas( localurl );
@@ -312,6 +322,9 @@ var selectedAlbum = null;
 // Creates a list of the users albums to save
 //
 function pickSkyDriveAlbumToSave(){
+
+	// Show loading
+	show("loading");
 
 	// Get the token
 	getToken("wl.skydrive_update", function(token){
@@ -363,9 +376,11 @@ function pickSkyDriveAlbumToSave(){
 					btn.className = "delete";
 					btn.innerHTML = "x";
 
-					btn.onclick=function(){
-						
-						if(!confirm("Delete "+ obj.name)){return;}
+					btn.onclick=function(e){
+
+						e.stopPropagation();
+
+						if(!confirm("Delete "+ obj.name)){return false;}
 
 						httpDelete( "https://apis.live.net/v5.0/" + obj.id + "/?access_token="+token, function(){
 							container.removeChild(fig);
@@ -398,10 +413,11 @@ function pickSkyDriveAlbumToSave(){
 
 				container.appendChild(fig);
 			}
-		});
 
-		// Show Albums tab
-		show("albums");
+			// Show Albums tab
+			show("albums");
+
+		});
 
 	});
 }
@@ -538,17 +554,18 @@ function httpPost( url, data, callback){
 	// IE10, FF, Chrome
 	if('withCredentials' in new XMLHttpRequest()){
 
-	var r = new XMLHttpRequest();
-	// xhr.responseType = "json"; // is not supported in any of the vendors yet.
-	r.onload = function(e){
-		callback(r.responseText?JSON.parse(r.responseText):{error:{message:"Could not get resource"}});
-	};
+		var r = new XMLHttpRequest();
+		// xhr.responseType = "json"; // is not supported in any of the vendors yet.
+		r.onload = function(e){
+			callback(r.responseText?JSON.parse(r.responseText):{error:{message:"Could not get resource"}});
+		};
 
-	r.open("POST", url);
+		r.open("POST", url);
 
-	r.setRequestHeader("Content-Type",'application/json');
+		r.setRequestHeader("Content-Type",'application/json');
 
-	r.send( JSON.stringify(data) );
+		r.send( JSON.stringify(data) );
+
 	}
 	else{
 
