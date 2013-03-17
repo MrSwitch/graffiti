@@ -64,7 +64,7 @@ function getToken(scope, callback){
 		window.authCallback = callback;
 
 		// else open the signin window
-		var win = window.open( 'https://oauth.live.com/authorize'+
+		var win = window.open( 'https://login.live.com/oauth20_authorize.srf'+
 			'?client_id='+WINDOWS_CLIENT_ID+
 			'&scope='+scope+
 			'&state='+scope+
@@ -261,39 +261,14 @@ function applyRemoteDataUrlToCanvas(url){
 
 	if( "withCredentials" in new XMLHttpRequest() ){
 
-		var progressEl = document.getElementById('loading').getElementsByTagName('progress')[0];
-
-		var xhr = new XMLHttpRequest();
-
-		// Prefix the request with the proxy server which adds the Access-Control-Allow-Origin: *
-		// source-code:  https://github.com/MrSwitch/proxy-server
-		xhr.open("GET", "http://proxy-server.herokuapp.com/"+ url );
-
-		xhr.responseType = "arraybuffer";
-
-		xhr.onprogress = function(e){
-			progressEl.max = e.total;
-			progressEl.value = e.loaded;
-		};
-		xhr.onload = function(r){
-
-			var type = xhr.getResponseHeader("content-type");
-			var blob = new Blob([xhr.response], {type: type});
+		httpRequestBlob(url, function(blob){
 
 			var URL = window.URL || window.webkitURL;
 			var localurl = URL.createObjectURL(blob);
 
 			applyDataUrlToCanvas( localurl );
 
-			// Remove the trail
-			progressEl.removeAttribute('max');
-			progressEl.removeAttribute('value');
-		};
-		xhr.onerror = function(r){
-			alert("Sorry there was an error downloading " + url);
-		};
-
-		xhr.send();
+		});
 	}
 	else{
 		// We are going to load it directly
@@ -303,8 +278,46 @@ function applyRemoteDataUrlToCanvas(url){
 }
 
 
+//
+// httpRequestBlob
+// Request a blob image from an external resource, return it in a callback
+function httpRequestBlob(url, callback){
 
+	if( !( "withCredentials" in new XMLHttpRequest() ) ) {
+		throw new Error("httpRequestBlob(): Browser does not support XHR2");
+	}
+	
+	var progressEl = document.getElementById('loading').getElementsByTagName('progress')[0];
 
+	var xhr = new XMLHttpRequest();
+
+	// Prefix the request with the proxy server which adds the Access-Control-Allow-Origin: *
+	// source-code:  https://github.com/MrSwitch/proxy-server
+	xhr.open("GET", "http://proxy-server.herokuapp.com/"+ url );
+
+	xhr.responseType = "arraybuffer";
+
+	xhr.onprogress = function(e){
+		progressEl.max = e.total;
+		progressEl.value = e.loaded;
+	};
+	xhr.onload = function(r){
+
+		var type = xhr.getResponseHeader("content-type");
+		var blob = new Blob([xhr.response], {type: type});
+
+		callback(blob);
+
+		// Remove the trail
+		progressEl.removeAttribute('max');
+		progressEl.removeAttribute('value');
+	};
+	xhr.onerror = function(r){
+		alert("Sorry there was an error downloading " + url);
+	};
+
+	xhr.send();
+}
 
 /*************************************************
  *
