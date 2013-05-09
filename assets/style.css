@@ -24,6 +24,7 @@ body{
 }
 
 	button{
+		cursor: pointer;
 		display: inline-block;
 		border:none;
 		border-radius:50px;
@@ -57,7 +58,7 @@ body{
 		}
 
 canvas{
-	cursor: crosshair;
+	cursor: url(spray-icon.png),crosshair;
 }
 
 

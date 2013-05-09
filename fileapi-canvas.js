@@ -40,6 +40,19 @@ canvas.addEventListener('mousemove', function(e){
 	}
 });
 
+// Touch
+// This is the handler for a touchmove event
+function touch(evt){
+	//
+	evt.preventDefault();
+
+	// Changed Touches
+	var touches = evt.changedTouches || evt.touches;
+	for (var i=0; i<touches.length; i++) {
+		draw(touches[i]);
+	}
+}
+
 // Touch events
 canvas.addEventListener('touchmove', touch,false);
 canvas.addEventListener('touchstart', touch,false);
@@ -65,6 +78,9 @@ document.onpaste = function(e){
 	}
 	return false;
 };
+
+// Prevent icon changing to text in Chrome
+document.onselectstart = function(){ return false; };
 
 
 //
@@ -97,19 +113,6 @@ function draw(e){
 	ctx.arc(e.clientX||e.pageX, e.clientY||e.pageY, (e.webkitRadiusX ? 5*Math.min((e.webkitRadiusX)/100, 2) : 10), 0, Math.PI*2, true);
 	ctx.closePath();
 	ctx.fill();
-}
-
-// Touch
-// This is the handler for a touchmove event
-function touch(evt){
-	//
-	evt.preventDefault();
-
-	// Changed Touches
-	var touches = evt.changedTouches || evt.touches;
-	for (var i=0; i<touches.length; i++) {
-		draw(touches[i]);
-	}
 }
 
 
