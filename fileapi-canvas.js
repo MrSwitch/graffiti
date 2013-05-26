@@ -110,7 +110,7 @@ function draw(e){
 	ctx.fillStyle = color;
 	ctx.beginPath();
 	// Draw the arc, webkit supports radius so for touch devices we may support different sizes
-	ctx.arc(e.clientX||e.pageX, e.clientY||e.pageY, (e.webkitRadiusX&&e.webkitRadiusX>10 ? 5*Math.min((e.webkitRadiusX)/100, 2) : 10), 0, Math.PI*2, true);
+	ctx.arc(e.clientX||e.pageX, e.clientY||e.pageY, 10, 0, Math.PI*2, true);
 	ctx.closePath();
 	ctx.fill();
 }
